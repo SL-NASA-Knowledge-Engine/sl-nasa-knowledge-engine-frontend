@@ -19,8 +19,8 @@ export default function Home() {
         <header className="app-header">
           <div className="app-header-inner">
             <div className="app-title">
-              <div className="app-title-main">Orbital Oddysey</div>
-              <div className="app-title-sub">Marketing Campaign for a new TV series Launch</div>
+              <div className="app-title-main">Space Biology Knowledge Engine</div>
+              <div className="app-title-sub">Explora el conocimiento biológico espacial con IA — una puerta a los descubrimientos de la NASA.</div>
             
               {/* use the same visual separator as the sidebar between title and items */}
               <div className="sidebar-separator" />

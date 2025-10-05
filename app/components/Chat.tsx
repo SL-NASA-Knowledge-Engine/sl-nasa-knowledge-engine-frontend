@@ -7,7 +7,7 @@ type Message = { id: string; role: "user" | "assistant"; text: string };
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([
-    { id: "m1", role: "assistant", text: "Hola — soy tu asistente AI. ¿En qué puedo ayudarte?" },
+    { id: "m1", role: "assistant", text: "Bienvenido. Soy LABI, tu asistente impulsado por IA para explorar investigaciones biológicas espaciales de la NASA. ¿Sobre qué tema quieres aprender?" },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
