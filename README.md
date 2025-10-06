@@ -88,10 +88,3 @@ Please open issues or pull requests at: [SL-NASA-Knowledge-Engine GitHub org](ht
 ## Credits
 
 This project assembled multiple AI tools during development: NotebookLM and Perplexity for literature analysis, Copilot for code suggestions, Claude and ChatGPT for drafting and prototyping. The platform integrates structured knowledge (Neo4j), vector search, and LLM synthesis to create LABI.
-
----
-
-If you'd like, I can:
-- Add an environment variables section (what the proxy expects, where to configure backend target URL).
-- Add a short developer quickstart that shows editing and testing `linkifyText` or other components.
-- Add badges, license, or CI instructions for GitHub Actions.
