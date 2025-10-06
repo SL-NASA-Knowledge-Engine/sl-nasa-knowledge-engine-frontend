@@ -120,9 +120,18 @@ p, span, label, li, a {
 .chat-attach-btn { color: rgba(0,0,0,0.7); }
 
 .msg { margin-bottom: 10px; display: flex; gap: 8px; align-items: flex-start; }
+.msg { margin-bottom: 10px; display: flex; gap: 8px; align-items: flex-start; width: 100%; }
 .msg .msg-role { font-size: 12px; color: rgba(0,0,0,0.6); width: 48px; }
-.msg .msg-text { background: rgba(0,0,0,0.04); padding: 10px 12px; border-radius: 8px; }
-.msg.user .msg-text { background: #dbeafe; }
+.msg .msg-text { background: rgba(0,0,0,0.04); padding: 10px 12px; border-radius: 8px; max-width: 68%; word-wrap: break-word; display: inline-block; }
+
+/* Assistant messages: bubble anchored to the left */
+.msg.assistant { justify-content: flex-start; }
+.msg.assistant .msg-text { margin-right: auto; }
+
+/* User messages: bubble anchored to the right */
+.msg.user { justify-content: flex-end; }
+.msg.user .msg-text { background: #dbeafe; margin-left: auto; text-align: left; }
+.msg.user .msg-role { display: none; }
 .msg.assistant .msg-text { background: #f3f4f6; }
 .msg.assistant .msg-role { color: var(--brand-blue); font-weight: 700; }
 

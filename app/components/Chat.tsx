@@ -57,6 +57,75 @@ export default function Chat() {
     }
   }
 
+  function linkifyText(text: string): React.ReactNode[] {
+  // Regex for URLs (word boundary before protocol helps avoid partial matches)
+  const urlRegex = /\bhttps?:\/\/[\S)]+/g;
+  // Regex for PMCID like PMC1234567 (match any length of digits)
+  const pmcRegex = /PMC\d+/g;
+
+    const lines = text.split(/\n/);
+    const nodes: React.ReactNode[] = [];
+
+    lines.forEach((line, idx) => {
+      // If line has '## Referencias' make it a heading
+      if (/##\s*Referencias/i.test(line) || /^Referencias[:]?/i.test(line)) {
+        nodes.push(
+          <div key={`h-${idx}`} style={{ fontWeight: 700, marginTop: 8, marginBottom: 6 }}>Referencias</div>
+        );
+        return;
+      }
+
+      // Replace PMCID first: turn PMCxxxxx into link to pmc
+      let parts: Array<string | React.ReactNode> = [line];
+
+      const pmcMatches = line.match(pmcRegex);
+      if (pmcMatches) {
+        parts = [];
+        let cursor = 0;
+        pmcMatches.forEach((pmc) => {
+          const i = line.indexOf(pmc, cursor);
+          if (i > cursor) parts.push(line.slice(cursor, i));
+          const href = `https://pmc.ncbi.nlm.nih.gov/articles/${pmc}/`;
+          parts.push(
+            <a key={`${pmc}-${idx}`} href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-blue)' }}>
+              {pmc}
+            </a>
+          );
+          cursor = i + pmc.length;
+        });
+        if (cursor < line.length) parts.push(line.slice(cursor));
+      }
+
+      // Now replace any URLs in each part
+      parts.forEach((part, pidx) => {
+        if (typeof part !== 'string') {
+          nodes.push(part);
+          return;
+        }
+
+        let lastIndex = 0;
+        let match: RegExpExecArray | null;
+        while ((match = urlRegex.exec(part)) !== null) {
+          const url = match[0];
+          const i = match.index;
+          if (i > lastIndex) nodes.push(part.slice(lastIndex, i));
+          nodes.push(
+            <a key={`u-${idx}-${pidx}-${i}`} href={url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-blue)' }}>
+              {url}
+            </a>
+          );
+          lastIndex = i + url.length;
+        }
+        if (lastIndex < part.length) nodes.push(part.slice(lastIndex));
+      });
+
+      // Add a line break after each original line except the last
+      if (idx < lines.length - 1) nodes.push(<br key={`br-${idx}`} />);
+    });
+
+    return nodes;
+  }
+
   return (
     <div className="chat-root">
       <div className="chat-panel">
@@ -66,7 +135,9 @@ export default function Chat() {
           return (
             <div key={msg.id} className={`msg ${msg.role} ${isTyping ? "typing" : ""}`}>
               <div className="msg-role">{msg.role === "user" ? "Tú" : "LABI"}</div>
-              <div className="msg-text">{msg.text}</div>
+              <div className="msg-text">
+                {msg.role === 'assistant' ? <>{linkifyText(msg.text)}</> : msg.text}
+              </div>
             </div>
           );
         })}
